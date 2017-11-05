@@ -1,0 +1,79 @@
+A bucket program (for now) consists of single file.
+
+
+character =
+  horizontal-tab | newline | vertical-tab | form-feed | " " | "!" | '"' | "#" |
+  "$" | "%" | "&" | "'" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | "0" |
+  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | ":" | ";" | "<" | "=" |
+  ">" | "?" | "@" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" |
+  "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" |
+  "X" | "Y" | "Z" | "[" | "\" | "]" | "^" | "_" | "`" | "a" | "b" | "c" | "d" |
+  "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" |
+  "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "{" | "|" | "}" | "~" ;
+
+
+letter =
+  "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" |
+  "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" |
+  "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" |
+  "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+
+
+digit =
+  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+
+identifier =
+  letter | "_" , { letter | digit | "_" } ;
+
+
+keyword =
+  "end" | "if" | "elif" | "else" | "do" | "for" | "break" | "cycle" | "ret" |
+  "and" | "or" | "not" | "class" | "method" ;
+
+
+symbol =
+  "(" | ")" | "[" | "]" | "+" | "-" | "*" | "/" | "^" | "%" | "=" | "==" | "!="
+  | ">" | ">=" | "<" | "<=" | "." | "," | ":" | newline | end-of-file;
+
+
+literal =
+  integer-literal | real-literal | string-literal | character-literal |
+  boolean-literal ;
+
+
+integer-literal =
+  digit , { digit } ;
+
+
+real-literal =
+  ( ( digit , { digit } , "." , { digit } ) | ( { digit } , "." , digit , {
+  digit } ) ) , [ "e" | "E" , [ "+" | "-" ] , digit , { digit } ] ;
+
+
+escaped-character =
+  "\a" | "\b" | "\f" | "\n" | "\r" | "\t" | "\v" | "\\" | "\'" | '\"' ;
+
+
+string-literal-character =
+  ( character - '"' - "\") | escaped-character ;
+
+
+character-literal-character =
+  ( character - "'" - "\") | escaped-character ;
+
+
+string-literal =
+  '"' , { string-literal-character } , '"' ;
+
+
+character-literal =
+  "'" , character-literal-character , "'" ;
+
+
+boolean-literal =
+  "true" | "false" ;
+
+
+Newlines are significant, but other whitespace is ignored except when separating
+tokens. Comments are the same as in C/C++, except that multi-line comments nest.
