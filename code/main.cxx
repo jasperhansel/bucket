@@ -1,3 +1,4 @@
+#include "miscellaneous/common.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/source_file.hxx"
 #include "frontend/token.hxx"

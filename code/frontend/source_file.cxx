@@ -1,3 +1,4 @@
+#include "miscellaneous/common.hxx"
 #include "frontend/source_file.hxx"
 #include "miscellaneous/concatenate.hxx"
 #include <stdexcept>

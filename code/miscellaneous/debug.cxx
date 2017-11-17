@@ -1,3 +1,6 @@
+#include "miscellaneous/common.hxx"
+
+
 #ifdef BUCKET_CLANG_CRASH_ON_EXCEPTION
 
 

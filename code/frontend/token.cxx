@@ -1,3 +1,4 @@
+#include "miscellaneous/common.hxx"
 #include "frontend/token.hxx"
 using namespace frontend;
 

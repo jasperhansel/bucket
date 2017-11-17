@@ -1,4 +1,5 @@
 #pragma once
+#include "miscellaneous/common.hxx"
 #include "frontend/source_file.hxx"
 #include "frontend/token.hxx"
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "miscellaneous/common.hxx"
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -8,17 +9,6 @@
 
 
 namespace misc {
-
-
-#if defined __clang__
-  #define RESTRICT __restrict__
-#elif defined __GNUC__
-  #define RESTRICT __restrict__
-#elif defined _MSC_VER
-  #define RESTRICT __restrict
-#else
-  #define RESTRICT
-#endif
 
 
 inline constexpr std::size_t sizeAsString(char) noexcept
