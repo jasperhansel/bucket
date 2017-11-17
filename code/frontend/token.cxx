@@ -143,7 +143,7 @@ Token::Token(SourceFile::Position begin, SourceFile::Position end, VariantType&&
 {}
 
 
-std::ostream& operator<<(std::ostream& stream, Token& token)
+std::ostream& frontend::operator<<(std::ostream& stream, Token& token)
 {
   if (auto identifier_ptr = token.getIdentifier())
     stream << '<' << *identifier_ptr << '>';
