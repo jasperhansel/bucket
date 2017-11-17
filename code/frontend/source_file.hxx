@@ -19,7 +19,7 @@ public:
 
   explicit SourceFile(const char* path);
 
-  int current();
+  int current() const noexcept;
 
   void next();
 

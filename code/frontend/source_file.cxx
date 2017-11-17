@@ -1,8 +1,7 @@
 #include "frontend/source_file.hxx"
-#include "miscellaneous/format.hxx"
+#include "miscellaneous/concatenate.hxx"
 #include <stdexcept>
 using namespace frontend;
-using namespace std;
 
 
 SourceFile::Position::Position()
@@ -22,14 +21,14 @@ SourceFile::SourceFile(const char* path)
   current_position(1, 1)
 {
   if (!file)
-    throw runtime_error(misc::format("unable to open file '", path, '\''));
+    throw std::runtime_error(misc::concatenate("unable to open file '", path, '\''));
   current_character = file.get();
   if (current_character == eof && !file.eof())
-    throw runtime_error("failed to read character from file");
+    throw std::runtime_error("failed to read character from file");
 }
 
 
-int SourceFile::current()
+int SourceFile::current() const noexcept
 {
   return current_character;
 }
@@ -49,7 +48,7 @@ void SourceFile::next()
   current_character = file.get();
   if (current_character == eof)
     if (!file.eof())
-      throw runtime_error("failed to read character from file");
+      throw std::runtime_error("failed to read character from file");
 }
 
 

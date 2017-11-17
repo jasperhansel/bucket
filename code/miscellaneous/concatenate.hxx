@@ -180,7 +180,7 @@ inline char* writeAsStringHelper(char* RESTRICT buf, First&& first, Rest&&... re
 
 
 template <typename... Args>
-std::string format(Args&&... args)
+std::string concatenate(Args&&... args)
 {
   auto total_size = sizeAsStringHelper(std::forward<Args>(args)...);
   std::string result;

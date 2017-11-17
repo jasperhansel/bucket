@@ -1,6 +1,5 @@
 #include "frontend/token.hxx"
 using namespace frontend;
-using namespace std;
 
 
 static const char* keywordToString(Keyword keyword)
@@ -53,98 +52,98 @@ static const char* symbolToString(Symbol symbol)
 }
 
 
-Token Token::identifier(SourceFile::Position begin, SourceFile::Position end, string&& identifier)
+Token Token::identifier(SourceFile::Position begin, SourceFile::Position end, std::string&& identifier)
 {
-  return Token(begin, end, VariantType(in_place_index_t<1>(), move(identifier)));
+  return Token(begin, end, VariantType(std::in_place_index_t<1>(), std::move(identifier)));
 }
 
 
 Token Token::keyword(SourceFile::Position begin, SourceFile::Position end, Keyword keyword)
 {
-  return Token(begin, end, VariantType(in_place_index_t<2>(), keyword));
+  return Token(begin, end, VariantType(std::in_place_index_t<2>(), keyword));
 }
 
 
 Token Token::symbol(SourceFile::Position begin, SourceFile::Position end, Symbol symbol)
 {
-  return Token(begin, end, VariantType(in_place_index_t<3>(), symbol));
+  return Token(begin, end, VariantType(std::in_place_index_t<3>(), symbol));
 }
 
 
 Token Token::integerLiteral(SourceFile::Position begin, SourceFile::Position end, unsigned long integer_literal)
 {
-  return Token(begin, end, VariantType(in_place_index_t<4>(), integer_literal));
+  return Token(begin, end, VariantType(std::in_place_index_t<4>(), integer_literal));
 }
 
 
 Token Token::realLiteral(SourceFile::Position begin, SourceFile::Position end, double real_literal)
 {
-  return Token(begin, end, VariantType(in_place_index_t<5>(), real_literal));
+  return Token(begin, end, VariantType(std::in_place_index_t<5>(), real_literal));
 }
 
 
-Token Token::stringLiteral(SourceFile::Position begin, SourceFile::Position end, string&& string_literal)
+Token Token::stringLiteral(SourceFile::Position begin, SourceFile::Position end, std::string&& string_literal)
 {
-  return Token(begin, end, VariantType(in_place_index_t<6>(), move(string_literal)));
+  return Token(begin, end, VariantType(std::in_place_index_t<6>(), std::move(string_literal)));
 }
 
 
 Token Token::booleanLiteral(SourceFile::Position begin, SourceFile::Position end, bool boolean_literal)
 {
-  return Token(begin, end, VariantType(in_place_index_t<7>(), boolean_literal));
+  return Token(begin, end, VariantType(std::in_place_index_t<7>(), boolean_literal));
 }
 
 
-string* Token::getIdentifier()
+std::string* Token::getIdentifier()
 {
-  return get_if<1>(&value);
+  return std::get_if<1>(&value);
 }
 
 
 Keyword* Token::getKeyword()
 {
-  return get_if<2>(&value);
+  return std::get_if<2>(&value);
 }
 
 
 Symbol* Token::getSymbol()
 {
-  return get_if<3>(&value);
+  return std::get_if<3>(&value);
 }
 
 
 unsigned long* Token::getIntegerLiteral()
 {
-  return get_if<4>(&value);
+  return std::get_if<4>(&value);
 }
 
 
 double* Token::getRealLiteral()
 {
-  return get_if<5>(&value);
+  return std::get_if<5>(&value);
 }
 
 
-string* Token::getStringLiteral()
+std::string* Token::getStringLiteral()
 {
-  return get_if<6>(&value);
+  return std::get_if<6>(&value);
 }
 
 
 bool* Token::getBooleanLiteral()
 {
-  return get_if<7>(&value);
+  return std::get_if<7>(&value);
 }
 
 
 Token::Token(SourceFile::Position begin, SourceFile::Position end, VariantType&& value)
 : begin(begin),
   end(end),
-  value(move(value))
+  value(std::move(value))
 {}
 
 
-ostream& frontend::operator<<(ostream& stream, Token& token)
+std::ostream& operator<<(std::ostream& stream, Token& token)
 {
   if (auto identifier_ptr = token.getIdentifier())
     stream << '<' << *identifier_ptr << '>';
