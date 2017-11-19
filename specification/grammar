@@ -1,0 +1,102 @@
+program =
+  { global-statement | newline } , end-of-file ;
+
+
+global-statement =
+  class | method | field ;
+
+
+class =
+  "class" , identifier , newline , { global-statement | newline } , "end" ,
+  newline ;
+
+
+method =
+  "method" , identifier , "(" , identifier , ":" , expression , ")" , { "," ,
+  identifier , ":" , expression } , ")" , [ ":" , expression ] , newline ,
+  { statement | newline } , "end" , newline ;
+
+
+field =
+  identifier , ":" , expression , newline ;
+
+
+statement =
+  if
+  | loop
+  | "break" , newline
+  | "cycle" , newline
+  | "ret" , [ expression ] , newline
+  | expression , newline ;
+
+
+if =
+  "if" , expression , newline , { statement | newline } ,
+  { "elif" , expression , newline , { statement | newline } } ,
+  [ "else" , newline , { statement | newline } ] ,
+  "end" , newline ;
+
+
+loop =
+  "do" , newline , statements , "end" , newline
+  | "for" , expression , newline , { statement | newline } , [ "else" , newline
+  , { statement | newline } ] , "end" , newline ;
+
+
+expression =
+  or-expression , [ "=" , expression ] ;
+
+
+or-expression =
+  and-expression , [ "or" , or-expression ] ;
+
+
+and-expression =
+  equality-expression , [ "and" , and-expression ] ;
+
+
+equality-expression =
+  comparison-expression , [ ( "!=" | "==" ) , comparison-expression ] ;
+
+
+comparison-expression =
+  term , [ ( "<" | "<=" | ">" | ">=" ) , term ] ;
+
+
+arithmetic_expression =
+  term , { ( "+" | "-" ) , term } ;
+
+
+term =
+  factor , { ( "*" | "/" | "%" ) , factor } ;
+
+
+factor =
+  exponent
+  | ( "+" | "-" | "not" | "*" | "&" ) , factor ;
+
+
+exponent =
+  postfix_expression , [ "^" , factor ] ;
+
+
+postfix-expression =
+  simple-expression , { method , call , index } ;
+
+
+method =
+  "." , identifier , [ call ] ;
+
+
+call =
+  "(" , [ expression , { "," , expression } ] , ")" ;
+
+
+index =
+  "[" , [ expression , { "," , expression } ] , "]" ;
+
+
+simple-expression =
+  identifier , [ call ]
+  | literal
+  | "(" , expression , ")" ;
