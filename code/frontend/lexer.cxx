@@ -3,6 +3,7 @@
 #include "frontend/source_file.hxx"
 #include "frontend/token.hxx"
 #include "miscellaneous/concatenate.hxx"
+#include <cassert>
 #include <cstring>
 #include <stdexcept>
 using namespace frontend;
@@ -49,7 +50,15 @@ void Lexer::next()
       }
 
     case '"':
-      lexString();
+      lexStringLiteral();
+      break;
+
+    case '#':
+    case '$':
+      throw std::runtime_error("unexpected character in program");
+
+    case '\'':
+      lexCharacterLiteral();
       break;
 
     case SourceFile::eof:
@@ -71,7 +80,7 @@ void Lexer::lexSymbol(Symbol symbol)
 }
 
 
-void Lexer::lexString()
+void Lexer::lexStringLiteral()
 {
   auto begin = source_file.position();
   assert(source_file.current() == '"');
@@ -120,7 +129,7 @@ void Lexer::lexString()
     }
     else {
       character = static_cast<char>(source_file.current());
-      static char character_set[] = "\t\n\v\f !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+      static char character_set[] = "\t\n\v\f !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
       if (!std::strchr(character_set, character))
         throw std::runtime_error(misc::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
     }
@@ -129,4 +138,63 @@ void Lexer::lexString()
   }
   source_file.next();
   current_token = Token::stringLiteral(begin, source_file.position(), move(s));
+}
+
+
+void Lexer::lexCharacterLiteral()
+{
+  auto begin = source_file.position();
+  assert(source_file.current() == '\'');
+  source_file.next();
+  char character;
+  if (source_file.current() == '\'')
+    throw std::runtime_error(misc::concatenate("empty character literal (", source_file.position().line, ", column ", source_file.position().column, ")"));
+  if (source_file.current() == '\\') {
+    source_file.next();
+    switch (source_file.current()) {
+      case 'a':
+        character = '\a';
+        break;
+      case 'b':
+        character = '\b';
+        break;
+      case 'f':
+        character = '\f';
+        break;
+      case 'n':
+        character = '\n';
+        break;
+      case 'r':
+        character = '\r';
+        break;
+      case 't':
+        character = '\t';
+        break;
+      case 'v':
+        character = '\v';
+        break;
+      case '\\':
+        character = '\\';
+        break;
+      case '\'':
+        character = '\'';
+        break;
+      case '"':
+        character = '"';
+        break;
+      default:
+        throw std::runtime_error(misc::concatenate("invalid escape sequence (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+    }
+  }
+  else {
+    character = static_cast<char>(source_file.current());
+    static char character_set[] = "\t\n\v\f !\"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    if (!std::strchr(character_set, character))
+      throw std::runtime_error(misc::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+  }
+  source_file.next();
+  if (source_file.current() != '\'')
+    throw std::runtime_error(misc::concatenate("character literal has multiple characters (line ", source_file.position().line, ", column ", source_file.position().column, ")"));
+  source_file.next();
+  current_token = Token::characterLiteral(begin, source_file.position(), character);
 }

@@ -25,7 +25,9 @@ private:
 
   void lexSymbol(Symbol symbol);
 
-  void lexString();
+  void lexStringLiteral();
+
+  void lexCharacterLiteral();
 
 };
 

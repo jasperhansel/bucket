@@ -89,9 +89,15 @@ Token Token::stringLiteral(SourceFile::Position begin, SourceFile::Position end,
 }
 
 
+Token Token::characterLiteral(SourceFile::Position begin, SourceFile::Position end, char character_literal)
+{
+  return Token(begin, end, VariantType(std::in_place_index_t<7>(), character_literal));
+}
+
+
 Token Token::booleanLiteral(SourceFile::Position begin, SourceFile::Position end, bool boolean_literal)
 {
-  return Token(begin, end, VariantType(std::in_place_index_t<7>(), boolean_literal));
+  return Token(begin, end, VariantType(std::in_place_index_t<8>(), boolean_literal));
 }
 
 
@@ -131,9 +137,15 @@ std::string* Token::getStringLiteral()
 }
 
 
-bool* Token::getBooleanLiteral()
+char* Token::getCharacterLiteral()
 {
   return std::get_if<7>(&value);
+}
+
+
+bool* Token::getBooleanLiteral()
+{
+  return std::get_if<8>(&value);
 }
 
 
@@ -200,6 +212,42 @@ std::ostream& frontend::operator<<(std::ostream& stream, Token& token)
       }
     }
     stream << "\">";
+  }
+
+  else if (auto character_literal_ptr = token.getCharacterLiteral()) {
+    stream << "<'";
+    switch (*character_literal_ptr) {
+      case '\a':
+        stream << "\\a";
+        break;
+      case '\b':
+        stream << "\\b";
+        break;
+      case '\f':
+        stream << "\\f";
+        break;
+      case '\n':
+        stream << "\\n";
+        break;
+      case '\r':
+        stream << "\\r";
+        break;
+      case '\t':
+        stream << "\\t";
+        break;
+      case '\v':
+        stream << "\\v";
+        break;
+      case '\\':
+        stream << "\\\\";
+        break;
+      case '\'':
+        stream << "\\\'";
+        break;
+      default:
+        stream << *character_literal_ptr;
+    }
+    stream << "'>";
   }
 
   else if (auto boolean_literal_ptr = token.getBooleanLiteral())

@@ -37,6 +37,7 @@ public:
   static Token integerLiteral(SourceFile::Position begin, SourceFile::Position end, unsigned long integer_literal);
   static Token realLiteral(SourceFile::Position begin, SourceFile::Position end, double real_literal);
   static Token stringLiteral(SourceFile::Position begin, SourceFile::Position end, std::string&& string_literal);
+  static Token characterLiteral(SourceFile::Position begin, SourceFile::Position end, char character_literal);
   static Token booleanLiteral(SourceFile::Position begin, SourceFile::Position end, bool boolean_literal);
 
   std::string* getIdentifier();
@@ -45,6 +46,7 @@ public:
   unsigned long* getIntegerLiteral();
   double* getRealLiteral();
   std::string* getStringLiteral();
+  char* getCharacterLiteral();
   bool* getBooleanLiteral();
 
 private:
@@ -57,6 +59,7 @@ private:
     unsigned long,  // Integer Literal
     double,         // Real Literal
     std::string,    // String Literal
+    char,           // Character Literal
     bool            // Boolean Literal
   > value;
 
