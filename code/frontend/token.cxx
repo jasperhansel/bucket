@@ -161,8 +161,46 @@ std::ostream& frontend::operator<<(std::ostream& stream, Token& token)
   else if (auto real_literal_ptr = token.getRealLiteral())
     stream << "<real: " << *real_literal_ptr << '>';
 
-  else if (auto string_literal_ptr = token.getStringLiteral())
-    stream << "<\"" << *string_literal_ptr << "\">";
+  else if (auto string_literal_ptr = token.getStringLiteral()) {
+    stream << "<\"";
+    for (auto character : *string_literal_ptr) {
+      switch (character) {
+        case '\a':
+          stream << "\\a";
+          break;
+        case '\b':
+          stream << "\\b";
+          break;
+        case '\f':
+          stream << "\\f";
+          break;
+        case '\n':
+          stream << "\\n";
+          break;
+        case '\r':
+          stream << "\\r";
+          break;
+        case '\t':
+          stream << "\\t";
+          break;
+        case '\v':
+          stream << "\\v";
+          break;
+        case '\\':
+          stream << "\\\\";
+          break;
+        case '\'':
+          stream << '\'';
+          break;
+        case '"':
+          stream << "\\\"";
+          break;
+        default:
+          stream << character;
+      }
+    }
+    stream << "\">";
+  }
 
   else if (auto boolean_literal_ptr = token.getBooleanLiteral())
     stream << "<\033[31m" << (*boolean_literal_ptr ? "true" : "false") << "\033[0m>";

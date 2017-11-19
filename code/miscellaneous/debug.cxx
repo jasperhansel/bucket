@@ -5,7 +5,6 @@
 
 
 #include <csignal>
-using namespace std;
 
 
 extern "C" void __cxa_allocate_exception();
@@ -13,7 +12,7 @@ extern "C" void __cxa_allocate_exception();
 
 void __cxa_allocate_exception()
 {
-  raise(SIGSEGV);
+  std::raise(SIGSEGV);
 }
 
 

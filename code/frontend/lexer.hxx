@@ -25,6 +25,8 @@ private:
 
   void lexSymbol(Symbol symbol);
 
+  void lexString();
+
 };
 
 
