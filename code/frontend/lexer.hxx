@@ -29,6 +29,12 @@ private:
 
   void lexCharacterLiteral();
 
+  void lexNumberOrPeriod();
+
+  void lexSlash();
+
+  void lexIdentifierOrKeyword();
+
 };
 
 
