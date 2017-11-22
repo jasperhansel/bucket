@@ -1,5 +1,6 @@
 #include "miscellaneous/common.hxx"
 #include "frontend/lexer.hxx"
+#include "frontend/parser.hxx"
 #include "frontend/source_file.hxx"
 #include "frontend/token.hxx"
 #include <cstring>
@@ -27,14 +28,29 @@ static void lex(const char* path)
 }
 
 
+static void parse(const char* path)
+{
+  ast::Program program;
+  {
+    frontend::Parser parser{path};
+    program = parser.parse();
+  }
+  std::cout << program;
+}
+
+
 static void main_with_exceptions(int argc, char* argv[])
 {
-  if (argc >= 3 && std::strcmp(argv[1], "--read") == 0) {
+  if (argc == 3 && std::strcmp(argv[1], "--read") == 0) {
     read(argv[2]);
     return;
   }
-  if (argc >= 3 && std::strcmp(argv[1], "--lex") == 0) {
+  if (argc == 3 && std::strcmp(argv[1], "--lex") == 0) {
     lex(argv[2]);
+    return;
+  }
+  if (argc == 3 && std::strcmp(argv[1], "--parse") == 0) {
+    parse(argv[2]);
     return;
   }
 }

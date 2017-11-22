@@ -70,6 +70,10 @@ void Lexer::next()
       lexSymbol(Symbol::PercentSign);
       break;
 
+    case '&':
+      lexSymbol(Symbol::Ampersand);
+      break;
+
     case '\'':
       lexCharacterLiteral();
       break;

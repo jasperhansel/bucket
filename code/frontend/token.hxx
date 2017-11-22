@@ -15,12 +15,18 @@ enum class Keyword {
 };
 
 
+const char* keywordToString(Keyword keyword) noexcept;
+
+
 enum class Symbol {
   OpenParenthesis, CloseParenthesis, OpenSquareBracket, CloseSquareBracket,
   Plus, Minus, Asterisk, Slash, Caret, PercentSign, SingleEquals, DoubleEquals,
   BangEquals, Greater, GreaterOrEqual, Lesser, LesserOrEqual, Period, Comma,
-  Colon, Newline, EndOfFile
+  Colon, Ampersand, Newline, EndOfFile
 };
+
+
+const char* symbolToString(Symbol symbol) noexcept;
 
 
 class Token {

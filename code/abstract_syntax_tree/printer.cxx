@@ -1,7 +1,6 @@
 #include "miscellaneous/common.hxx"
-#include "abstract_syntax_tree/printer.hxx"
-#include "abstract_syntax_tree/visitor.hxx"
 #include "abstract_syntax_tree/abstract_syntax_tree.hxx"
+#include "abstract_syntax_tree/visitor.hxx"
 using namespace ast;
 
 
@@ -13,6 +12,8 @@ class Printer final : public Visitor {
 public:
 
   explicit Printer(std::ostream& stream) noexcept;
+
+  void visit(Program* program_ptr) override;
 
   void visit(Class* class_ptr) override;
 
@@ -58,6 +59,13 @@ private:
 Printer::Printer(std::ostream& stream) noexcept
 : stream(stream)
 {}
+
+
+void Printer::visit(Program* program_ptr)
+{
+  for (auto& global_statement : program_ptr->global_statements)
+    global_statement->receive(*this);
+}
 
 
 void Printer::visit(Class* class_ptr)

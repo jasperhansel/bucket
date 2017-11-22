@@ -6,6 +6,7 @@ namespace ast {
 
 
 struct Node;
+struct Program;
 struct GlobalStatement;
 struct Class;
 struct Method;
@@ -33,6 +34,8 @@ class Visitor {
 public:
 
   virtual ~Visitor() = default;
+
+  virtual void visit(Program* program_ptr) = 0;
 
   virtual void visit(Class* class_ptr) = 0;
 

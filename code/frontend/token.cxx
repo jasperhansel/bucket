@@ -1,9 +1,11 @@
 #include "miscellaneous/common.hxx"
 #include "frontend/token.hxx"
-using namespace frontend;
 
 
-static const char* keywordToString(Keyword keyword)
+namespace frontend {
+
+
+const char* keywordToString(Keyword keyword) noexcept
 {
   switch (keyword) {
     case Keyword::End:    return "end";
@@ -24,7 +26,7 @@ static const char* keywordToString(Keyword keyword)
 }
 
 
-static const char* symbolToString(Symbol symbol)
+const char* symbolToString(Symbol symbol) noexcept
 {
   switch (symbol) {
     case Symbol::OpenParenthesis:     return "(";
@@ -47,6 +49,7 @@ static const char* symbolToString(Symbol symbol)
     case Symbol::Period:              return ".";
     case Symbol::Comma:               return ",";
     case Symbol::Colon:               return ":";
+    case Symbol::Ampersand:           return "&";
     case Symbol::Newline:             return "newline";
     case Symbol::EndOfFile:           return "end-of-file";
   }
@@ -156,7 +159,7 @@ Token::Token(SourceFile::Position begin, SourceFile::Position end, VariantType&&
 {}
 
 
-std::ostream& frontend::operator<<(std::ostream& stream, Token& token)
+std::ostream& operator<<(std::ostream& stream, Token& token)
 {
   if (auto identifier_ptr = token.getIdentifier())
     stream << '<' << *identifier_ptr << '>';
@@ -254,4 +257,7 @@ std::ostream& frontend::operator<<(std::ostream& stream, Token& token)
     stream << "<\033[31m" << (*boolean_literal_ptr ? "true" : "false") << "\033[0m>";
 
   return stream;
+}
+
+
 }

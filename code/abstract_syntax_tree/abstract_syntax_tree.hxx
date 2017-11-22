@@ -1,6 +1,7 @@
 #pragma once
 #include "abstract_syntax_tree/visitor.hxx"
 #include <memory>
+#include <ostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -12,6 +13,12 @@ namespace ast {
 struct Node {
   virtual ~Node() = default;
   virtual void receive(Visitor& visitor) = 0;
+};
+
+
+struct Program final : Node {
+  std::vector<std::unique_ptr<GlobalStatement>> global_statements;
+  inline void receive(Visitor& visitor) override {visitor.visit(this);}
 };
 
 
@@ -132,6 +139,9 @@ struct Bool final : Expression {
   bool value;
   inline void receive(Visitor& visitor) override {visitor.visit(this);}
 };
+
+
+std::ostream& operator<<(std::ostream& stream, Node& node);
 
 
 }
