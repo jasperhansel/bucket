@@ -1,4 +1,5 @@
 #include "miscellaneous/common.hxx"
+#include "compiler_objects/module.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/parser.hxx"
 #include "frontend/source_file.hxx"
@@ -6,6 +7,7 @@
 #include <cstring>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 
 
 static void read(const char* path)
@@ -30,12 +32,24 @@ static void lex(const char* path)
 
 static void parse(const char* path)
 {
-  ast::Program program;
+  std::unique_ptr<ast::Class> program;
   {
     frontend::Parser parser{path};
     program = parser.parse();
   }
-  std::cout << program;
+  std::cout << *program;
+}
+
+
+static void compile(const char* path)
+{
+  std::unique_ptr<ast::Class> program;
+  {
+    frontend::Parser parser{path};
+    program = parser.parse();
+  }
+  cobjs::Module module{program.get()};
+  module.init(program.get());
 }
 
 
@@ -53,6 +67,11 @@ static void main_with_exceptions(int argc, char* argv[])
     parse(argv[2]);
     return;
   }
+  if (argc == 3 && std::strcmp(argv[1], "--compile") == 0) {
+    compile(argv[2]);
+    return;
+  }
+  throw std::runtime_error("bad command line arguments");
 }
 
 

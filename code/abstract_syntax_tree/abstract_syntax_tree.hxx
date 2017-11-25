@@ -16,12 +16,6 @@ struct Node {
 };
 
 
-struct Program final : Node {
-  std::vector<std::unique_ptr<GlobalStatement>> global_statements;
-  inline void receive(Visitor& visitor) override {visitor.visit(this);}
-};
-
-
 struct GlobalStatement : Node {};
 
 

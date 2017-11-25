@@ -17,8 +17,6 @@ public:
 
   To* result = nullptr;
 
-  void visit(Program* program_ptr) override {cast(program_ptr);}
-
   void visit(Class* class_ptr) override {cast(class_ptr);}
 
   void visit(Method* method_ptr) override {cast(method_ptr);}
@@ -81,7 +79,7 @@ T1 ast_cast(T2 ptr)
   static_assert(std::is_base_of<Node, From>::value);
   Caster<To> caster;
   ptr->receive(caster);
-  assert(caster.result == dynamic_cast<From*>(ptr));
+  assert(caster.result == dynamic_cast<T1>(ptr));
   return caster.result;
 }
 

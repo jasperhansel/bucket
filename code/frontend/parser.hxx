@@ -16,7 +16,7 @@ public:
 
   explicit Parser(const char* path);
 
-  ast::Program parse();
+  std::unique_ptr<ast::Class> parse();
 
 private:
 

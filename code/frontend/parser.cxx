@@ -11,12 +11,13 @@ Parser::Parser(const char* path)
 {}
 
 
-ast::Program Parser::parse()
+std::unique_ptr<ast::Class> Parser::parse()
 {
-  ast::Program program;
+  auto program = std::make_unique<ast::Class>();
+  program->name = "__module__";
   while (true) {
     if (auto ptr = parseGlobalStatement()) {
-      program.global_statements.push_back(std::move(ptr));
+      program->body.push_back(std::move(ptr));
       continue;
     }
     if (accept(Symbol::Newline))
@@ -98,13 +99,12 @@ std::unique_ptr<ast::Method> Parser::parseMethodDefinition()
 
 std::unique_ptr<ast::Field> Parser::parseMemberVariable()
 {
-  auto ptr = parsePostfixExpression();
-  if (!ptr)
-    return nullptr;
   auto member_variable = std::make_unique<ast::Field>();
-  member_variable->cls = std::move(ptr);
   if ((member_variable->name = getIdentifierString()).empty())
     return nullptr;
+  expect(Symbol::Colon);
+  if (!(member_variable->cls = parseExpression()))
+    throw std::runtime_error("expected expression in member variable");
   expect(Symbol::Newline);
   return member_variable;
 }
