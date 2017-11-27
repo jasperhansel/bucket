@@ -1,4 +1,5 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
+#include "support/concatenate.hxx"
 #include "compiler_objects/module.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/parser.hxx"

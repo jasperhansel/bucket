@@ -1,6 +1,6 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "frontend/source_file.hxx"
-#include "miscellaneous/concatenate.hxx"
+#include "support/concatenate.hxx"
 #include <stdexcept>
 using namespace frontend;
 
@@ -22,7 +22,7 @@ SourceFile::SourceFile(const char* path)
   current_position(1, 1)
 {
   if (!file)
-    throw std::runtime_error(misc::concatenate("unable to open file '", path, '\''));
+    throw std::runtime_error(support::concatenate("unable to open file '", path, '\''));
   current_character = file.get();
   if (current_character == eof && !file.eof())
     throw std::runtime_error("failed to read character from file");

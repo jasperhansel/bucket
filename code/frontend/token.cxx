@@ -1,8 +1,14 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "frontend/token.hxx"
 
 
 namespace frontend {
+
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type"
+#endif
 
 
 const char* keywordToString(Keyword keyword) noexcept
@@ -54,6 +60,11 @@ const char* symbolToString(Symbol symbol) noexcept
     case Symbol::EndOfFile:           return "end-of-file";
   }
 }
+
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 
 Token Token::identifier(SourceFile::Position begin, SourceFile::Position end, std::string&& identifier)

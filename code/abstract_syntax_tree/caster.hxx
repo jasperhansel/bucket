@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include <cassert>
 #include <type_traits>
 
@@ -54,7 +54,7 @@ public:
 private:
 
   template <typename From>
-  void cast(From* ptr)
+  void cast([[maybe_unused]] From* ptr)
   {
     if constexpr (std::is_base_of<To, From>::value)
       result = static_cast<To*>(ptr);

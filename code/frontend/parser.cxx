@@ -1,6 +1,6 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "frontend/parser.hxx"
-#include "miscellaneous/concatenate.hxx"
+#include "support/concatenate.hxx"
 #include <stdexcept>
 #include <iostream>
 using namespace frontend;
@@ -598,7 +598,7 @@ std::string Parser::expectIdentifier()
 void Parser::expect(Keyword keyword)
 {
   if (!accept(keyword))
-    throw std::runtime_error(misc::concatenate("expected keyword '", keywordToString(keyword), '\''));
+    throw std::runtime_error(support::concatenate("expected keyword '", keywordToString(keyword), '\''));
 }
 
 
@@ -606,7 +606,7 @@ void Parser::expect(Symbol symbol)
 {
   if (!accept(symbol)) {
     std::cerr << lexer.current();
-    throw std::runtime_error(misc::concatenate("expected symbol '", symbolToString(symbol), "' (~line ", lexer.current().begin.line, ")"));
+    throw std::runtime_error(support::concatenate("expected symbol '", symbolToString(symbol), "' (~line ", lexer.current().begin.line, ")"));
   }
 }
 

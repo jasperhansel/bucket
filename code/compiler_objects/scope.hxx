@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/object.hxx"
 #include <string>
 #include <unordered_map>

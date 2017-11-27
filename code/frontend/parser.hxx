@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "abstract_syntax_tree/abstract_syntax_tree.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/token.hxx"

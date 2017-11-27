@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 
 
 namespace ast {

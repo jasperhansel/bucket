@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/object.hxx"
 #include <string>
 
@@ -16,7 +16,7 @@ public:
 
   Field(Scope* parent, const std::string& name, Class* cls);
 
-private:
+protected:
 
   const std::string name;
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "common.hxx"
 #include "abstract_syntax_tree/visitor.hxx"
 #include <memory>
 #include <ostream>

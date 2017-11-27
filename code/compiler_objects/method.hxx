@@ -1,5 +1,5 @@
 #pragma once
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/object.hxx"
 #include <string>
 #include <vector>
@@ -17,7 +17,7 @@ public:
 
   Method(Scope* parent_scope, const std::string& name, std::vector<Class*>&& argument_classes, Class* return_type);
 
-private:
+protected:
 
   const std::string name;
 

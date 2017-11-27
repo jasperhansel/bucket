@@ -1,8 +1,8 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/source_file.hxx"
 #include "frontend/token.hxx"
-#include "miscellaneous/concatenate.hxx"
+#include "support/concatenate.hxx"
 #include <cassert>
 #include <cctype>
 #include <cstring>
@@ -44,7 +44,7 @@ void Lexer::next()
         auto begin = source_file.position();
         source_file.next();
         if (source_file.current() != '=')
-          throw std::runtime_error(misc::concatenate("expected \'=\' after \'!\' (line ", source_file.position().line, ", column ", source_file.position().column, ')'));
+          throw std::runtime_error(support::concatenate("expected \'=\' after \'!\' (line ", source_file.position().line, ", column ", source_file.position().column, ')'));
         current_token = Token::symbol(begin, source_file.position(), Symbol::BangEquals);
         source_file.next();
         break;
@@ -241,7 +241,7 @@ void Lexer::next()
       break;
 
     default:
-      throw std::runtime_error(misc::concatenate("character not from bucket character set"));
+      throw std::runtime_error(support::concatenate("character not from bucket character set"));
 
   }
 }
@@ -263,7 +263,7 @@ void Lexer::lexStringLiteral()
   std::string s;
   while (source_file.current() != '"') {
     if (source_file.current() == SourceFile::eof)
-      throw std::runtime_error(misc::concatenate("string literal starting on line ", source_file.position().line, ", column ", source_file.position().column, " not closed"));
+      throw std::runtime_error(support::concatenate("string literal starting on line ", source_file.position().line, ", column ", source_file.position().column, " not closed"));
     char character;
     if (source_file.current() == '\\') {
       source_file.next();
@@ -299,14 +299,14 @@ void Lexer::lexStringLiteral()
           character = '"';
           break;
         default:
-          throw std::runtime_error(misc::concatenate("invalid escape sequence (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+          throw std::runtime_error(support::concatenate("invalid escape sequence (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
       }
     }
     else {
       character = static_cast<char>(source_file.current());
       static char character_set[] = "\t\n\v\f !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
       if (!std::strchr(character_set, character))
-        throw std::runtime_error(misc::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+        throw std::runtime_error(support::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
     }
     s += character;
     source_file.next();
@@ -323,7 +323,7 @@ void Lexer::lexCharacterLiteral()
   source_file.next();
   char character;
   if (source_file.current() == '\'')
-    throw std::runtime_error(misc::concatenate("empty character literal (", source_file.position().line, ", column ", source_file.position().column, ")"));
+    throw std::runtime_error(support::concatenate("empty character literal (", source_file.position().line, ", column ", source_file.position().column, ")"));
   if (source_file.current() == '\\') {
     source_file.next();
     switch (source_file.current()) {
@@ -358,18 +358,18 @@ void Lexer::lexCharacterLiteral()
         character = '"';
         break;
       default:
-        throw std::runtime_error(misc::concatenate("invalid escape sequence (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+        throw std::runtime_error(support::concatenate("invalid escape sequence (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
     }
   }
   else {
     character = static_cast<char>(source_file.current());
     static char character_set[] = "\t\n\v\f !\"#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     if (!std::strchr(character_set, character))
-      throw std::runtime_error(misc::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
+      throw std::runtime_error(support::concatenate("invalid character in source file (line ", source_file.position().line, ", column ", source_file.position().column - 1, ")"));
   }
   source_file.next();
   if (source_file.current() != '\'')
-    throw std::runtime_error(misc::concatenate("character literal has multiple characters (line ", source_file.position().line, ", column ", source_file.position().column, ")"));
+    throw std::runtime_error(support::concatenate("character literal has multiple characters (line ", source_file.position().line, ", column ", source_file.position().column, ")"));
   source_file.next();
   current_token = Token::characterLiteral(begin, source_file.position(), character);
 }
@@ -481,14 +481,14 @@ void Lexer::lexNumberOrPeriod()
       source_file.next();
     }
     if (!std::isdigit(source_file.current()))
-      throw std::runtime_error(misc::concatenate("expected number in real literal exponent (", source_file.position().line, ", column ", source_file.position().column, ')'));
+      throw std::runtime_error(support::concatenate("expected number in real literal exponent (", source_file.position().line, ", column ", source_file.position().column, ')'));
     do {
       number += static_cast<char>(source_file.current());
       source_file.next();
     } while (std::isdigit(source_file.current()));
   }
   if (isIdentifierCharacter(source_file.current()))
-    throw std::runtime_error(misc::concatenate("letter in number literal (line ", source_file.position().line, ", column ", source_file.position().column, ')'));
+    throw std::runtime_error(support::concatenate("letter in number literal (line ", source_file.position().line, ", column ", source_file.position().column, ')'));
   current_token = Token::realLiteral(begin, source_file.position(), stod(number));
 }
 
@@ -509,7 +509,7 @@ void Lexer::lexSlash()
     do {
       source_file.next();
       if (source_file.current() == SourceFile::eof)
-        throw std::runtime_error(misc::concatenate("block comment starting on line ", source_file.position().line, ", column ", source_file.position().column, " not closed"));
+        throw std::runtime_error(support::concatenate("block comment starting on line ", source_file.position().line, ", column ", source_file.position().column, " not closed"));
       if (source_file.current() == '*') {
         source_file.next();
         if (source_file.current() == '/')

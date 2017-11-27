@@ -1,4 +1,4 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/method.hxx"
 #include <utility>
 using namespace cobjs;

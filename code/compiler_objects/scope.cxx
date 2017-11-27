@@ -1,4 +1,4 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/scope.hxx"
 #include "abstract_syntax_tree/abstract_syntax_tree.hxx"
 #include "abstract_syntax_tree/caster.hxx"

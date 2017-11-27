@@ -1,10 +1,10 @@
-#include "miscellaneous/common.hxx"
+#include "common.hxx"
 #include "compiler_objects/class.hxx"
 #include "compiler_objects/field.hxx"
 #include "compiler_objects/method.hxx"
 #include "abstract_syntax_tree/abstract_syntax_tree.hxx"
 #include "abstract_syntax_tree/caster.hxx"
-#include "miscellaneous/concatenate.hxx"
+#include "support/concatenate.hxx"
 #include <stdexcept>
 #include <utility>
 using namespace cobjs;
@@ -22,7 +22,7 @@ void Class::init(ast::Class* cls)
     if (auto class_ptr = ast::ast_cast<ast::Class*>(global_statement.get())) {
       auto& entry = map[class_ptr->name];
       if (entry)
-        throw std::runtime_error(misc::concatenate("ERROR REDEFINING NAME"));
+        throw std::runtime_error(support::concatenate("ERROR REDEFINING NAME"));
       auto ptr = std::make_unique<Class>(this, class_ptr);
       ptr->init(class_ptr);
       entry = addToModuleFreeList(std::move(ptr));
@@ -30,7 +30,7 @@ void Class::init(ast::Class* cls)
     else if (auto method_ptr = ast::ast_cast<ast::Method*>(global_statement.get())) {
       auto& entry = map[method_ptr->name];
       if (entry)
-        throw std::runtime_error(misc::concatenate("ERROR REDEFINING NAME"));
+        throw std::runtime_error(support::concatenate("ERROR REDEFINING NAME"));
       std::vector<Class*> argument_classes;
       for (auto& arg : method_ptr->args)
         argument_classes.push_back(lookupClass(arg.second.get()));
@@ -41,7 +41,7 @@ void Class::init(ast::Class* cls)
       auto field_ptr = static_cast<ast::Field*>(global_statement.get());
       auto& entry = map[field_ptr->name];
       if (entry)
-        throw std::runtime_error(misc::concatenate("ERROR REDEFINING NAME"));
+        throw std::runtime_error(support::concatenate("ERROR REDEFINING NAME"));
       entry = addToModuleFreeList(std::make_unique<Field>(this, field_ptr->name, lookupClass(field_ptr->cls.get())));
     }
   }
