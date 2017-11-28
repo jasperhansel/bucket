@@ -3,7 +3,7 @@
 #include "compiler_objects/module.hxx"
 #include "frontend/lexer.hxx"
 #include "frontend/parser.hxx"
-#include "frontend/source_file.hxx"
+#include "frontend/sourcefile.hxx"
 #include "frontend/token.hxx"
 #include <cstring>
 #include <exception>
@@ -14,8 +14,8 @@
 static void read(const char* path)
 {
   frontend::SourceFile source_file{path};
-  while (source_file.current() != frontend::SourceFile::eof) {
-    std::cout << static_cast<char>(source_file.current());
+  while (!source_file.currentCharacter().isEndOfFile()) {
+    std::cout << source_file.currentCharacter();
     source_file.next();
   }
 }
@@ -24,8 +24,8 @@ static void read(const char* path)
 static void lex(const char* path)
 {
   frontend::Lexer lexer{path};
-  while (!(lexer.current().getSymbol() && *lexer.current().getSymbol() == frontend::Symbol::EndOfFile)) {
-    std::cout << lexer.current();
+  while (!(lexer.currentToken().getSymbol() && *lexer.currentToken().getSymbol() == frontend::Symbol::EndOfFile)) {
+    std::cout << lexer.currentToken();
     lexer.next();
   }
 }

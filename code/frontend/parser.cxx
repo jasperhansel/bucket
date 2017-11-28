@@ -539,31 +539,31 @@ std::unique_ptr<ast::Expression> Parser::parseIdentifier()
 
 std::unique_ptr<ast::Expression> Parser::parseLiteral()
 {
-  if (auto ptr = lexer.current().getIntegerLiteral()) {
+  if (auto ptr = lexer.currentToken().getIntegerLiteral()) {
     auto integer = std::make_unique<ast::Integer>();
     integer->value = *ptr;
     lexer.next();
     return integer;
   }
-  if (auto ptr = lexer.current().getRealLiteral()) {
+  if (auto ptr = lexer.currentToken().getRealLiteral()) {
     auto real = std::make_unique<ast::Real>();
     real->value = *ptr;
     lexer.next();
     return real;
   }
-  if (auto ptr = lexer.current().getStringLiteral()) {
+  if (auto ptr = lexer.currentToken().getStringLiteral()) {
     auto str = std::make_unique<ast::String>();
     str->value = std::move(*ptr);
     lexer.next();
     return str;
   }
-  if (auto ptr = lexer.current().getCharacterLiteral()) {
+  if (auto ptr = lexer.currentToken().getCharacterLiteral()) {
     auto character = std::make_unique<ast::Character>();
     character->value = *ptr;
     lexer.next();
     return character;
   }
-  if (auto ptr = lexer.current().getBooleanLiteral()) {
+  if (auto ptr = lexer.currentToken().getBooleanLiteral()) {
     auto boolean = std::make_unique<ast::Bool>();
     boolean->value = *ptr;
     lexer.next();
@@ -575,7 +575,7 @@ std::unique_ptr<ast::Expression> Parser::parseLiteral()
 
 std::string Parser::getIdentifierString()
 {
-  if (auto ptr = lexer.current().getIdentifier()) {
+  if (auto ptr = lexer.currentToken().getIdentifier()) {
     auto str = std::move(*ptr);
     lexer.next();
     return str;
@@ -586,7 +586,7 @@ std::string Parser::getIdentifierString()
 
 std::string Parser::expectIdentifier()
 {
-  auto ptr = lexer.current().getIdentifier();
+  auto ptr = lexer.currentToken().getIdentifier();
   if (!ptr)
     throw std::runtime_error("expected identifier");
   auto result = std::move(*ptr);
@@ -605,15 +605,15 @@ void Parser::expect(Keyword keyword)
 void Parser::expect(Symbol symbol)
 {
   if (!accept(symbol)) {
-    std::cerr << lexer.current();
-    throw std::runtime_error(support::concatenate("expected symbol '", symbolToString(symbol), "' (~line ", lexer.current().begin.line, ")"));
+    std::cerr << lexer.currentToken();
+    throw std::runtime_error(support::concatenate("expected symbol '", symbolToString(symbol), "' (~line ", lexer.currentToken().begin.line, ")"));
   }
 }
 
 
 bool Parser::accept(Keyword keyword)
 {
-  if (auto ptr = lexer.current().getKeyword(); ptr && *ptr == keyword) {
+  if (auto ptr = lexer.currentToken().getKeyword(); ptr && *ptr == keyword) {
     lexer.next();
     return true;
   }
@@ -623,7 +623,7 @@ bool Parser::accept(Keyword keyword)
 
 bool Parser::accept(Symbol symbol)
 {
-  if (auto ptr = lexer.current().getSymbol(); ptr && *ptr == symbol) {
+  if (auto ptr = lexer.currentToken().getSymbol(); ptr && *ptr == symbol) {
     lexer.next();
     return true;
   }

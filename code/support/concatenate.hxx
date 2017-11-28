@@ -196,6 +196,23 @@ struct ConcatenateHelper<T, typename std::enable_if<details::is_c_style_string<s
 
 };
 
+// specialization for std::string_view
+
+template <typename T>
+struct ConcatenateHelper<T, typename std::enable_if<std::is_same_v<std::remove_cv_t<std::remove_reference_t<T>>, std::string_view>>::type> {
+
+  static constexpr std::size_t sizeAsString(std::remove_cv_t<std::remove_reference_t<T>> value)
+  {
+    return value.size();
+  }
+
+  static char* writeAsString(char* BUCKET_RESTRICT buf, std::remove_cv_t<std::remove_reference_t<T>> value)
+  {
+    return std::copy(value.begin(), value.end(), buf);
+  }
+
+};
+
 // specialization for char arrays
 
 template <typename T>

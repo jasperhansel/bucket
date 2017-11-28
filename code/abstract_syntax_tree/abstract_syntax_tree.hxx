@@ -1,6 +1,7 @@
 #pragma once
 #include "common.hxx"
 #include "abstract_syntax_tree/visitor.hxx"
+#include "support/unicodecharacter.hxx"
 #include <memory>
 #include <ostream>
 #include <string>
@@ -125,7 +126,7 @@ struct String final : Expression {
 
 
 struct Character final : Expression {
-  char value;
+  support::UnicodeCharacter value;
   inline void receive(Visitor& visitor) override {visitor.visit(this);}
 };
 

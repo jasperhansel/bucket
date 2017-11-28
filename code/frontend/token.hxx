@@ -1,22 +1,21 @@
-#pragma once
+#ifndef BUCKET_FRONTEND_TOKEN_HXX
+#define BUCKET_FRONTEND_TOKEN_HXX
+
 #include "common.hxx"
-#include "frontend/source_file.hxx"
+#include "frontend/sourcefile.hxx"
+#include "support/unicodecharacter.hxx"
 #include <ostream>
 #include <string>
-#include <utility>
+#include <string_view>
 #include <variant>
 
-
 namespace frontend {
-
 
 enum class Keyword {
   End, If, Elif, Else, Do, For, Break, Cycle, Ret, And, Or, Not, Class, Method
 };
 
-
-const char* keywordToString(Keyword keyword) noexcept;
-
+std::string_view keywordToString(Keyword keyword) noexcept;
 
 enum class Symbol {
   OpenParenthesis, CloseParenthesis, OpenSquareBracket, CloseSquareBracket,
@@ -25,9 +24,7 @@ enum class Symbol {
   Colon, Ampersand, Newline, EndOfFile
 };
 
-
-const char* symbolToString(Symbol symbol) noexcept;
-
+std::string_view symbolToString(Symbol symbol) noexcept;
 
 class Token {
 
@@ -43,7 +40,7 @@ public:
   static Token integerLiteral(SourceFile::Position begin, SourceFile::Position end, unsigned long integer_literal);
   static Token realLiteral(SourceFile::Position begin, SourceFile::Position end, double real_literal);
   static Token stringLiteral(SourceFile::Position begin, SourceFile::Position end, std::string&& string_literal);
-  static Token characterLiteral(SourceFile::Position begin, SourceFile::Position end, char character_literal);
+  static Token characterLiteral(SourceFile::Position begin, SourceFile::Position end, support::UnicodeCharacter character_literal);
   static Token booleanLiteral(SourceFile::Position begin, SourceFile::Position end, bool boolean_literal);
 
   std::string* getIdentifier();
@@ -52,21 +49,23 @@ public:
   unsigned long* getIntegerLiteral();
   double* getRealLiteral();
   std::string* getStringLiteral();
-  char* getCharacterLiteral();
+  support::UnicodeCharacter* getCharacterLiteral();
   bool* getBooleanLiteral();
+
+  friend std::ostream& operator<<(std::ostream& stream, Token& token);
 
 private:
 
   std::variant<
-    std::monostate, // Empty
-    std::string,    // Identifier
-    Keyword,        // Keyword
-    Symbol,         // Symbol
-    unsigned long,  // Integer Literal
-    double,         // Real Literal
-    std::string,    // String Literal
-    char,           // Character Literal
-    bool            // Boolean Literal
+    std::monostate,             // Empty
+    std::string,                // Identifier
+    Keyword,                    // Keyword
+    Symbol,                     // Symbol
+    unsigned long,              // Integer Literal
+    double,                     // Real Literal
+    std::string,                // String Literal
+    support::UnicodeCharacter,  // Character Literal
+    bool                        // Boolean Literal
   > value;
 
   using VariantType = decltype(value);
@@ -75,8 +74,6 @@ private:
 
 };
 
-
-std::ostream& operator<<(std::ostream& stream, Token& token);
-
-
 }
+
+#endif
